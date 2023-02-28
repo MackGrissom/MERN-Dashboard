@@ -18,13 +18,15 @@ app.get('/', (req, res) => {
 })
 
 
-app.use('./api/v1/users', userRouter);
-app.use('./api/v1/properties', propertyRouter);
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/properties', propertyRouter);
 
 
 const startServer = async () => { 
     try {
-connectDB(process.env.MONGODB_URL)
+connectDB(process.env.MONGODB_URL);
+console.log(process.env.MONGODB_URL)
+
 app.listen(8080, () => console.log('Server started on http://localhost:8080'));
     } catch (error) {
 console.log(error);
