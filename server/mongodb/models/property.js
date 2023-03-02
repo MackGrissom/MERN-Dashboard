@@ -10,6 +10,6 @@ photo: {type: String, required:true },
 creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 })
 
-const propertyModel = mongoose.model("Proprety", PropertySchema);
+const propertyModel = mongoose.model("Property", PropertySchema);
 
 export default propertyModel;
