@@ -9,7 +9,11 @@ const AllProperties = () => {
   const navigate = useNavigate();
 
 
-  const { tableQueryResult: { data, isLoading, isError } } = useTable();
+  const { tableQueryResult: { data, isLoading, isError }, 
+current, 
+setCurrent} 
+  c, 
+  = useTable();
 
   const allProperties = data?.data ?? [];
 
