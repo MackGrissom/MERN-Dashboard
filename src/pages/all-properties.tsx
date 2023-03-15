@@ -2,7 +2,7 @@ import { Add } from "@mui/icons-material"
 import { useTable } from '@pankod/refine-core'
 import { Box, Stack, Typography, TextField, Select, MenuItem } from '@pankod/refine-mui'
 import { useNavigate } from "@pankod/refine-react-router-v6"
-
+import { useMemo } from "react"
 import { PropertyCard, CustomButton } from "components"
 
 const AllProperties = () => {
@@ -22,11 +22,21 @@ const AllProperties = () => {
     = useTable();
 
   const allProperties = data?.data ?? [];
-const currentPrice = sorter.find((item) => item.field === 'price')?.order;
 
-const toggleSort = (field: string) => {
-  setSorter([{field, order: currentPrice === 'asc' ? 'desc' : 'asc'}])
-}
+  const currentPrice = sorter.find((item) => item.field === 'price')?.order;
+
+  const toggleSort = (field: string) => {
+    setSorter([{ field, order: currentPrice === 'asc' ? 'desc' : 'asc' }])
+  }
+
+  const currentFilterValues = useMemo(() => {
+    const logicalFilers = filters.flatMap((item) => ('field' in item ? item : []))
+
+    return {
+      title: logicalFilers.find((item) => item.field === 'title')?.value || '',
+    }
+
+  }, [filters])
 
 
 
@@ -43,7 +53,7 @@ const toggleSort = (field: string) => {
             <Box display='flex' gap={2} flexWrap='wrap' mb={{ xs: '20px', sm: 0 }}>
 
               <CustomButton
-                title={`Sort Price ${currentPrice === 'asc' ? '↑' :'↓'}`}
+                title={`Sort Price ${currentPrice === 'asc' ? '↑' : '↓'}`}
                 handleClick={() => toggleSort('price')}
                 backgroundColor='#475be8'
                 color='#fcfcfc'
@@ -52,8 +62,17 @@ const toggleSort = (field: string) => {
                 variant="outlined"
                 color='info'
                 placeholder='Search By Title'
-                value=''
-                onChange={() => { }}
+                value={currentFilterValues.title}
+                onChange={(e) => {
+                  setFilters([
+                    {
+                      field: 'title',
+                      operator: 'contains',
+                      value: e.currentTarget.value ? e.currentTarget.value : undefined
+
+                    }
+                  ])
+                }}
               />
               <Select variant="outlined"
                 color="info"
