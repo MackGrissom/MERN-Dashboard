@@ -34,6 +34,7 @@ const AllProperties = () => {
 
     return {
       title: logicalFilers.find((item) => item.field === 'title')?.value || '',
+      propertyType: logicalFilers.find((item) => item.field === 'propertyType')?.value || '',
     }
 
   }, [filters])
@@ -74,18 +75,46 @@ const AllProperties = () => {
                   ])
                 }}
               />
-              <Select variant="outlined"
-                color="info"
-                displayEmpty
-                required
-                inputProps={{ 'aria-label': 'Without label' }}
-                defaultValue=""
-                value=""
-                onChange={() => { }}
-              >
-                <MenuItem value=""> All</MenuItem>
-
-              </Select>
+              <Select
+                                variant="outlined"
+                                color="info"
+                                displayEmpty
+                                required
+                                inputProps={{ "aria-label": "Without label" }}
+                                defaultValue=""
+                                value={currentFilterValues.propertyType}
+                                onChange={(e) => {
+                                    setFilters(
+                                        [
+                                            {
+                                                field: "propertyType",
+                                                operator: "eq",
+                                                value: e.target.value,
+                                            },
+                                        ],
+                                        "replace",
+                                    );
+                                }}
+                            >
+                                <MenuItem value="">All</MenuItem>
+                                {[
+                                    "Apartment",
+                                    "Villa",
+                                    "Farmhouse",
+                                    "Condos",
+                                    "Townhouse",
+                                    "Duplex",
+                                    "Studio",
+                                    "Chalet",
+                                ].map((type) => (
+                                    <MenuItem
+                                        key={type}
+                                        value={type.toLowerCase()}
+                                    >
+                                        {type}
+                                    </MenuItem>
+                                ))}
+                            </Select>
 
 
             </Box>
@@ -138,23 +167,25 @@ const AllProperties = () => {
             color='#fcfcfc'
             disabled={current === pageCount}
           />
-          <Select variant="outlined"
-            color="info"
-            displayEmpty
-            required
-            inputProps={{ 'aria-label': 'Without label' }}
-            defaultValue={10}
-            onChange={() => { }}
-          >
-            {[10, 20, 30, 40, 50].map((size) => (
-
-              <MenuItem key={size} value={size}> Show {size}</MenuItem>
-            ))}
-
-
-
-
-          </Select>
+        <Select
+                        variant="outlined"
+                        color="info"
+                        displayEmpty
+                        required
+                        inputProps={{ "aria-label": "Without label" }}
+                        defaultValue={10}
+                        onChange={(e) =>
+                            setPageSize(
+                                e.target.value ? Number(e.target.value) : 10,
+                            )
+                        }
+                    >
+                        {[10, 20, 30, 40, 50].map((size) => (
+                            <MenuItem key={size} value={size}>
+                                Show {size}
+                            </MenuItem>
+                        ))}
+                    </Select>
         </Box>
       )}
 
